@@ -34,4 +34,5 @@ class ApplicationModel(models.Model):
     applogo = models.ImageField(upload_to='ApplicationLogo/')
     appname = models.CharField(max_length=100)
     packagename = models.CharField(max_length=100)
-    vpnserver = models.ForeignKey(VpnModel , on_delete=models.CASCADE)
+    # vpnserver = models.ForeignKey(VpnModel , on_delete=models.CASCADE)
+    vpnserver = models.CharField(max_length=250)

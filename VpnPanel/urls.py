@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path , include
 from VpnApi import views
 
 
@@ -35,12 +35,16 @@ urlpatterns = [
     path('updatevpn/<int:id>/' , views.updatevpn_view , name = 'updatevpn'), # Delete vpn 
 
     # application
-    path('appdashboard/' , views.appdashboard_view , name='appdashboard'),  # vpn dashboard 
+    path('appdashboard/' , views.appdashboard_view , name='appdashboard'),  # app dashboard 
+    path('DeleteApp/<int:id>/' , views.DeleteApp_view , name='DeleteApp'),  # Delete app 
+    path('UpdateApp/<int:id>/' , views.UpdateApp_view , name='UpdateApp'),  # Delete app 
 
 
 
 
-    # path('^.*', views.notfound ),
+
+
+    path('api/', include('VpnApi.urls') ),
 ]
 
 

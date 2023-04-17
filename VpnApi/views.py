@@ -1,15 +1,34 @@
 from django.shortcuts import render , redirect
 from django.contrib.auth import authenticate , login , logout
 from django.contrib import messages
-
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .forms import LoginForm , VpnForm , AddAppForm
 from .models import VpnModel ,CountryModel , ApplicationModel
+from rest_framework.response import Response
+
+from .serializers import AppSerializer
 
 
 
+# api views
 
+def getapp_api(request):
+
+    if request.method == 'GET':
+        all_app = ApplicationModel.objects.all()
+
+        a_id = request.GET.get('id')
+        if a_id:
+            all_app = all_app.filter(id = a_id)
+
+        serializer = AppSerializer(all_app , many=True)
+
+        return JsonResponse(serializer.data , content_type = 'application/json' ,safe=False)
+        # return Response(serializer.data)
+    
+    
 # Create your views here.
 
 
@@ -161,31 +180,103 @@ def updatevpn_view(request , id):
 
 # application
 
+# def appdashboard_view(request ):
+
+#     allvpn = VpnModel.objects.all()
+#     allapps = ApplicationModel.objects.all()
+#     forms = AddAppForm()
+
+#     if request.method == 'POST':
+#         # applogo = request.FILES['applogo'].read()
+#         # appname = request.POST.get('appname')
+#         # packagename = request.POST.get('packagename')
+#         # vpnserver = request.POST.get('vpnserver')
+#         # print(applogo)
+#         # print(appname)
+#         # print(packagename)
+#         # print(vpnserver)
+
+#         forms = AddAppForm(request.POST , request.FILES)
+#         if forms.is_valid():
+#             forms.save()
+
+#             return redirect('appdashboard')
+        
+#         else:
+#             print('form validation fails')
+
+#     context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms}
+#     return render(request , 'appdashboard.html' , context)
+
+
+
+
 def appdashboard_view(request ):
 
-    allvpn = VpnModel.objects.all()
+    allvpn = VpnModel.objects.filter(is_enable = True)
     allapps = ApplicationModel.objects.all()
     forms = AddAppForm()
 
     if request.method == 'POST':
-        # applogo = request.FILES['applogo'].read()
-        # appname = request.POST.get('appname')
-        # packagename = request.POST.get('packagename')
-        # vpnserver = request.POST.get('vpnserver')
-        # print(applogo)
+        applogo = request.FILES.get('applogo')
+        appname = request.POST.get('appname')
+        packagename = request.POST.get('packagename')
+        vpnserver = request.POST.get('vpnserver')
+        # print(applogo , type(applogo))
         # print(appname)
         # print(packagename)
-        # print(vpnserver)
+        # print(vpnserver , type(vpnserver))
 
-        forms = AddAppForm(request.POST , request.FILES)
-        if forms.is_valid():
-            forms.save()
-
-            return redirect('appdashboard')
+        if vpnserver == "":
+            ls = []
+            for i in allvpn:
+                print(i.countryshorts)
+                ls.append(i.countryshorts)
+            vpnserver = ','.join(ls)
         
-        else:
-            print('form validation fails')
+        apps = ApplicationModel()
+        apps.applogo = applogo
+        apps.appname = appname
+        apps.packagename = packagename
+        apps.vpnserver = vpnserver
+        apps.save()
+        return redirect('appdashboard')
+        
+     
 
     context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms}
     return render(request , 'appdashboard.html' , context)
 
+
+
+# delete app 
+
+def DeleteApp_view(request , id):
+
+    apps = ApplicationModel.objects.get(id = id).delete()
+
+    return redirect('appdashboard')
+
+
+
+def UpdateApp_view(request , id):
+    app = ApplicationModel.objects.get(id = id)
+
+    if request.method == 'POST':
+        applogo = request.POST.get('uapplogo')
+        appname = request.POST.get('uappname')
+        packagename = request.POST.get('upackagename')
+        vpnserver = request.POST.get('uvpnserver')
+
+        print(applogo)
+        print(appname)
+        print(packagename)
+        print(vpnserver)
+
+        return redirect('appdashboard')
+
+
+
+
+    context = {'app':app}
+    return render(request , 'updateapp.html' , context)

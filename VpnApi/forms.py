@@ -44,7 +44,7 @@ class VpnForm(forms.ModelForm):
 
 
 class AddAppForm(forms.ModelForm):
-
+    # vpnserver : forms.CharField(label = 'Select Vpn Server' , widget=forms.Select(attrs={'class':'form-control'})) 
     class Meta:
         model = ApplicationModel
         fields = ['applogo' , 'appname' , 'packagename' , 'vpnserver']
@@ -53,5 +53,5 @@ class AddAppForm(forms.ModelForm):
             
             'appname' :forms.TextInput(attrs={'class':'form-control'}), 
             'packagename' :forms.TextInput(attrs={'class':'form-control'}) ,
-            'vpnserver' :forms.Select(attrs={'class':'form-control'}) 
+            'vpnserver' :forms.Select(attrs={'class':'form-control ' }) 
         }

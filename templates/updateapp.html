@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>UpdateVpn Page</title>
+{% endblock title %}
+    
+
+
+<!-- css block -->
+{% block css %}
+
+<style>
+    #form-div{
+        width: 60%;
+        margin: 0px auto;
+        border-radius: 15px;
+        padding: 50px;
+    }
+
+
+    @media(max-width:576px){
+        #form-div{
+        width: 100%;
+        border-radius: 15px;
+        font-size: 13px;
+        padding: 12px;
+    }
+    }
+</style>
+{% endblock css %}
+
+
+<!-- body block  -->
+{% block body %}
+{% include 'navbar.html' %}
+
+
+<!-- main container  -->
+<div class="container my-5">
+    
+    
+    <!-- login container  -->
+    <div class="container my-5 shadow bg-light" id="form-div">
+        
+        <div class="container text-center my-2 py-3">
+            <h1 class="display-6">Update App</h1>
+        </div>
+
+        <form action="{% url 'UpdateApp' app.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+
+            <!-- app name  -->
+            <div class="mb-3">
+                <label for="" class="form-label">App Name </label>
+                <input type="text" name="uappname" id="uappname" value="{{app.appname}}" class="form-control">
+            </div>
+
+            <!-- package name  -->
+            <div class="mb-3">
+                <label for="" class="form-label">Package Name </label>
+                <input type="text" name="upackagename" id="upackagename" value="{{app.packagename}}" class="form-control">
+            </div>
+
+
+            <!-- vpn server  -->
+            <div class="mb-3">
+                <label for="" class="form-label">Vpn Server </label>
+                <input type="text" name="uvpnserver" id="uvpnserver" value="{{app.vpnserver}}" class="form-control">
+            </div>
+
+
+            <!-- app logo  -->
+            <div class="mb-3">
+                <img src="{{app.applogo.url}}" alt="No Logo">
+            </div>
+            
+            <div class="mb-3">
+                <label for="" class="form-label">Vpn Server </label>
+                <input type="file" name="uapplogo" id="uapplogo" value="{{app.applogo}}" class="form-control">
+            </div>
+            
+            <!-- submit  -->
+            <div class="mb-3">
+                <input type="submit" value="Update App" class="btn btn-success">
+                <a href="{% url 'appdashboard' %}" class="btn btn-secondary">Back</a>
+            </div>
+            
+        </form>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+{% endblock body %}
+
+    
+<!-- js block  -->
+{% block js %}
+
+
+{% endblock js %}

@@ -55,18 +55,58 @@
 
                     <form action="{% url 'appdashboard' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
+
                         <!-- logo upload  -->
-                        {% for fm in forms %}
                         <td>
-                            {{fm}}
+                            <input type="file" name="applogo" id="applogo" class="form-control" required>
                         </td>
 
-                        {% endfor %}
+                        <!-- app name  -->
+                        <td>
+                            <input type="text" name="appname" id="appname" class="form-control" required>
+                        </td>
+
+                        <!-- package name  -->
+                        <td>
+                            <input type="text" name="packagename" id="packagename" class="form-control" required>
+                        </td>
+
+                        <!-- vpn server   -->
+                        <td>
+                            <!-- <select name="vpnserver" id="vpnserver" class="form-select" aria-multiselectable="multiple">
+                                <option value="">Select Vpn Server</option>
+                                {% for vpn in allvpn %}
+                                <option value="{{vpn.countryshorts}}">{{vpn.countryshorts}}</option>
+                                {% endfor %}
+                                
+                            </select> -->
+
+                            <div class="dropdown">
+                                <button class="btn btn-light dropdown-toggle border w-100" type="button"
+                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Dropdown button
+                                </button>
+                                <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
+                                    
+                                    {% for vpn in allvpn %}
+
+                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn.countryshorts}}"><span class="ps-2">{{vpn.countryshorts}}</span></li>
+                                    {% endfor %}
+
+                                    <input type="text" name="vpnserver" id="vpnserver" hidden>
+                                </ul>
+                            </div>
+                            
+
+
+                        </td>
+
 
 
                         <!-- Add App Btn   -->
                         <td>
                             <input type="submit" id="addappsBtn" value="ADD APP " class="btn btn-success">
+                            <a href="{% url 'appdashboard' %}" class="btn btn-secondary">Cancel</a>
                         </td>
 
                     </form>
@@ -78,21 +118,19 @@
                 <!-- show all apps from here  -->
                 {% for app in allapps %}
 
-                <tr>
+                <tr id="{{app.id}}">
                     <td>
                         <img src="{{app.applogo.url}}" alt="No Logo" class="" height="50px">
                     </td>
 
                     <td>{{app.appname}}</td>
                     <td>{{app.packagename}}</td>
-                    <td><input type="text" value="{{app.vpnserver}}" class="form-control"></td>
+                    <td><input type="text" value="{{app.vpnserver}}" class="form-control" readonly></td>
 
                     <td>
-                        <a href=""><img src="{% static 'Logo/update.png' %}"
-                                alt="No dlt Icon"></a>
+                        <a href="{% url 'UpdateApp' app.id %}"><img src="{% static 'Logo/update.png' %}" alt="No dlt Icon"></a>
 
-                        <form action="" onsubmit="return deleteBtn()"
-                            style="display: inline-block;">
+                        <form action="{% url 'DeleteApp' app.id %}" onsubmit="return deleteBtn()" style="display: inline-block;">
                             <!-- <a href=""><img src="{% static 'Logo/delete.png' %}" alt="No dlt Icon"></a> -->
 
                             <button style="border: none;" type="submit"><img src="{% static 'Logo/delete.png' %}"
@@ -100,6 +138,14 @@
                         </form>
                     </td>
 
+                </tr>
+                {% empty %}
+                <tr>
+                    <td>No Logo</td>
+                    <td>No Data</td>
+                    <td>No Data</td>
+                    <td>No Data</td>
+                    <td>No Server Selected</td>
                 </tr>
 
                 {% endfor %}
@@ -123,6 +169,7 @@
 
 
 
+
 {% endblock body %}
 
 
@@ -130,9 +177,9 @@
 <!-- js block  -->
 {% block js %}
 
-<!-- <script>
+<script>
   function deleteBtn(){
-    var x = confirm('Are You Sure You Want To Delete This Vpn ?');
+    var x = confirm('Are You Sure You Want To Delete This App ?');
 
     if (x == true){
       return true;
@@ -143,7 +190,7 @@
   }
 
 
-</script> -->
+</script>
 
 <!-- add new app featur  -->
 
@@ -155,6 +202,25 @@
         $('#addapps_row').show()
     })
 
+
+    // select checkbox values 
+    var val = [];
+    $(function(){
+      $('#addappsBtn').click(function(){
+        $(':checkbox:checked').each(function(i){
+          val[i] = $(this).val();
+        });
+        
+        console.log(val)
+
+        var vpnserver = document.getElementById('vpnserver');
+        vpnserver.value = val;
+      });
+    });
+
+
+    
+ 
 
 </script>
 
