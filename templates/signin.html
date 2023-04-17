@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>Login Page</title>
+{% endblock title %}
+    
+
+
+<!-- css block -->
+{% block css %}
+
+<style>
+    #form-div{
+        width: 60%;
+        margin: 0px auto;
+        border-radius: 15px;
+    }
+    @media(max-width:576px){
+        #form-div{
+        width: 100%;
+        margin: 0px auto;
+        border-radius: 15px;
+    }   
+    }
+    
+    
+</style>
+{% endblock css %}
+
+
+<!-- body block  -->
+{% block body %}
+
+<!-- main container  -->
+<div class="container my-5">
+    <div class="container my-5 py-5">
+
+    </div>
+    
+    <!-- login container  -->
+    <div class="container my-5 p-5 shadow bg-light" id="form-div">
+        <form action="{% url 'signin' %}" method="post">
+            {% csrf_token %}
+
+            <!-- fields comes from backend  -->
+
+            {% for fm in forms %}
+                <div class="mb-3">
+                    {{fm.label_tag}}
+                    {{fm}}
+                    <span style="color:red">{{fm.errors}}</span>
+                </div>
+            {% endfor %}
+
+            <!-- show password div  -->
+            <div class="mb-3">
+                <input type="checkbox" onclick="showpass()">
+                <label for="">Show Password</label>
+            </div>
+
+            <!-- submit div -->
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="Login">
+                
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+{% endblock body %}
+
+    
+<!-- js block  -->
+{% block js %}
+
+<script>
+    function showpass(){
+        var password = document.getElementById('id_password');
+
+        if (id_password.type == 'password'){
+            id_password.type = 'text';
+        }
+        else{
+            id_password.type = 'password';
+        }
+    }
+</script>
+{% endblock js %}

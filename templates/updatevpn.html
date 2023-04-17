@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>UpdateVpn Page</title>
+{% endblock title %}
+    
+
+
+<!-- css block -->
+{% block css %}
+
+<style>
+    #form-div{
+        width: 60%;
+        margin: 0px auto;
+        border-radius: 15px;
+        padding: 50px;
+    }
+
+
+    @media(max-width:576px){
+        #form-div{
+        width: 100%;
+        border-radius: 15px;
+        font-size: 13px;
+        padding: 12px;
+    }
+    }
+</style>
+{% endblock css %}
+
+
+<!-- body block  -->
+{% block body %}
+{% include 'navbar.html' %}
+
+
+<!-- main container  -->
+<div class="container my-5">
+    
+    
+    <!-- login container  -->
+    <div class="container my-5 shadow bg-light" id="form-div">
+        
+        <div class="container text-center my-2 py-3">
+            <h1 class="display-6">Update VPN</h1>
+        </div>
+
+        <form action="{% url 'updatevpn' vpn.id %}" method="post">
+            {% csrf_token %}
+
+            
+            <!-- hostname -->
+                <div class="mb-3">
+                    <label for="">Update Hostname</label>
+                    <input type="text" name="hostname" id="hostname" value="{{vpn.hostname}}" class="form-control">
+                </div>
+
+                <!-- vpn country -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Country</label>
+                <input type="text" list="countrylist" name="countryshorts" placeholder="Search Country ..." class="form-control" value="{{vpn.countryshorts}}">
+                <datalist id="countrylist" style="width: 50%;">
+
+                    {% for country in countries %}
+                        <option value="{{country.shortName}}">{{country.fullName}}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+                <!-- username -->
+                <div class="mb-3">
+                    <label for="">Update username</label>
+                    <input type="text" name="username" id="username" value="{{vpn.username}}" class="form-control">
+                </div>
+                
+                <!-- password -->
+                <div class="mb-3">
+                    <label for="">Update password</label>
+                    <input type="text" name="password" id="password" value="{{vpn.pasword}}" class="form-control">
+                </div>
+
+                <!-- config -->
+                <div class="mb-3">
+                    <label for="">Update config</label>
+                    
+                    <textarea name="config" id="config" cols="30" rows="10" class="form-control">{{vpn.config}}</textarea>
+                </div>
+            
+                <!-- is_enable -->
+                
+                {% if vpn.is_enable %}
+                    <div class="mb-3">
+                        <input type="checkbox" name="is_enable" id="is_enable" checked >
+                        <label for="">Enable Vpn</label>
+                    </div>
+
+                {% else %}
+                <div class="mb-3">
+                    <input type="checkbox" name="is_enable" id="is_enable"  >
+                    <label for="">Enable Vpn</label>
+                </div>
+
+                {% endif %}
+
+            
+            <!-- submit div -->
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="Update Vpn">
+                <a href="{% url 'vpndashboard' %}" class="btn btn-secondary">Cancel</a>
+                
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+{% endblock body %}
+
+    
+<!-- js block  -->
+{% block js %}
+
+
+{% endblock js %}

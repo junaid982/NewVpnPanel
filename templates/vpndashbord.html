@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>Vpn Dashboard</title>
+{% endblock title %}
+
+
+
+{% include 'message.html' %}
+
+<!-- body block  -->
+{% block body %}
+
+<!-- navigation bar  -->
+{% include 'navbar.html' %}
+
+<!-- vpn dashboard start from here  -->
+
+<!-- main container  -->
+<div class="container-fluid">
+
+  <!-- heading container  -->
+  <div class="container-xxl my-5 text-center text-light ">
+    <h1 class="display-4">Dashboard</h1>
+  </div>
+
+
+  <!-- add vpn button  -->
+  <div class="container-xxl text-end">
+    <a href="{% url 'addvpn' %}" class="btn btn-primary">ADD VPN</a>
+  </div>
+
+
+  <!-- dashboard container  -->
+  <div class="container-xxl my-4 p-3 bg-light rounded-3 shadow">
+
+    <table class="table">
+      <thead>
+        <th>Hostname</th>
+        <th>Countryshort</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Created At</th>
+        <th>Updated At</th>
+        <th>Is Enable </th>
+        <th >Action</th>
+
+      </thead>
+
+      <tbody>
+        {% for vpn in allvpn %}
+
+        <tr>
+          <td>{{vpn.hostname}}</td>
+          <td>{{vpn.countryshorts}}</td>
+          <td>{{vpn.username}}</td>
+          <td>{{vpn.pasword}}</td>
+          <td>{{vpn.created_at}}</td>
+          <td>{{vpn.updated_at}}</td>
+          
+          
+          <td>{% if vpn.is_enable %} Enable {% else %} Disable {% endif %} </td>
+
+
+          <td>
+            <a href="{% url 'updatevpn' vpn.id %}"><img src="{% static 'Logo/update.png' %}" alt="No dlt Icon"></a>
+            
+            <form action="{% url 'deletevpn' vpn.id %}" onsubmit="return deleteBtn()" style="display: inline-block;">
+              <!-- <a href=""><img src="{% static 'Logo/delete.png' %}" alt="No dlt Icon"></a> -->
+              
+              <button style="border: none;" type="submit"><img src="{% static 'Logo/delete.png' %}" alt="No dlt Icon"></button>
+            </form>
+          </td>
+
+        </tr>
+        {% endfor %}
+
+      </tbody>
+
+
+
+    </table>
+
+  </div>
+
+
+</div>
+
+
+
+
+
+{% endblock body %}
+
+
+
+<!-- js block  -->
+{% block js %}
+
+<script>
+  function deleteBtn(){
+    var x = confirm('Are You Sure You Want To Delete This Vpn ?');
+
+    if (x == true){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
+</script>
+
+{% endblock js %}
+
+<!-- css block -->
+{% block css %}
+{% endblock css %}

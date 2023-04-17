@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>Application Dashboard</title>
+{% endblock title %}
+
+
+
+{% include 'message.html' %}
+
+<!-- body block  -->
+{% block body %}
+
+<!-- navigation bar  -->
+{% include 'navbar.html' %}
+
+<!-- vpn dashboard start from here  -->
+
+<!-- main container  -->
+<div class="container-fluid">
+
+    <!-- heading container  -->
+    <div class="container-xxl my-5 text-center text-light ">
+        <h1 class="display-4">Applications </h1>
+    </div>
+
+
+    <!-- add vpn button  -->
+    <div class="container-xxl text-end">
+        <a href="#" class="btn btn-primary" id="addnew">ADD NEW</a>
+    </div>
+
+
+    <!-- dashboard container  -->
+    <div class="container-xxl my-4 p-3 bg-light rounded-3 shadow">
+
+        <table class="table">
+            <thead>
+                <th style="width: 20%;">Logo</th>
+                <th style="width: 20%;">App Name</th>
+                <th style="width: 20%;">Package Name</th>
+                <th style="width: 20%;">Vpn Server Location</th>
+
+                <th style="width: 20%;">Action</th>
+
+            </thead>
+
+            <tbody>
+
+                <!-- add apps section start from here  -->
+                <tr id="addapps_row">
+
+                    <form action="{% url 'appdashboard' %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- logo upload  -->
+                        {% for fm in forms %}
+                        <td>
+                            {{fm}}
+                        </td>
+
+                        {% endfor %}
+
+
+                        <!-- Add App Btn   -->
+                        <td>
+                            <input type="submit" id="addappsBtn" value="ADD APP " class="btn btn-success">
+                        </td>
+
+                    </form>
+                </tr>
+                <!-- add apps section end here  -->
+
+
+
+                <!-- show all apps from here  -->
+                {% for app in allapps %}
+
+                <tr>
+                    <td>
+                        <img src="{{app.applogo.url}}" alt="No Logo" class="" height="50px">
+                    </td>
+
+                    <td>{{app.appname}}</td>
+                    <td>{{app.packagename}}</td>
+                    <td><input type="text" value="{{app.vpnserver}}" class="form-control"></td>
+
+                    <td>
+                        <a href=""><img src="{% static 'Logo/update.png' %}"
+                                alt="No dlt Icon"></a>
+
+                        <form action="" onsubmit="return deleteBtn()"
+                            style="display: inline-block;">
+                            <!-- <a href=""><img src="{% static 'Logo/delete.png' %}" alt="No dlt Icon"></a> -->
+
+                            <button style="border: none;" type="submit"><img src="{% static 'Logo/delete.png' %}"
+                                    alt="No dlt Icon"></button>
+                        </form>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                <!-- show all apps end here  -->
+
+
+
+
+            </tbody>
+
+
+
+        </table>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+{% endblock body %}
+
+
+
+<!-- js block  -->
+{% block js %}
+
+<!-- <script>
+  function deleteBtn(){
+    var x = confirm('Are You Sure You Want To Delete This Vpn ?');
+
+    if (x == true){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+
+</script> -->
+
+<!-- add new app featur  -->
+
+<script>
+
+    $('#addapps_row').hide()
+
+    $('#addnew').click(function () {
+        $('#addapps_row').show()
+    })
+
+
+</script>
+
+
+{% endblock js %}
+
+<!-- css block -->
+{% block css %}
+{% endblock css %}

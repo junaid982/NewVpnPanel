@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+<!-- title block -->
+{% block title %}
+<title>AddVpn Page</title>
+{% endblock title %}
+
+
+
+<!-- css block -->
+{% block css %}
+
+<style>
+    #form-div {
+        width: 60%;
+        margin: 0px auto;
+        border-radius: 15px;
+        padding: 50px;
+    }
+
+
+    @media(max-width:576px) {
+        #form-div {
+            width: 100%;
+            border-radius: 15px;
+            font-size: 13px;
+            padding: 12px;
+        }
+    }
+</style>
+</style>
+{% endblock css %}
+
+
+<!-- body block  -->
+{% block body %}
+{% include 'navbar.html' %}
+
+
+<!-- main container  -->
+<div class="container my-5">
+
+
+    <!-- login container  -->
+    <div class="container my-5 shadow bg-light" id="form-div">
+
+        <div class="container text-center my-2 py-3">
+            <h1 class="display-6">Add VPN</h1>
+        </div>
+
+        <form action="{% url 'addvpn' %}" method="post">
+            {% csrf_token %}
+
+            <!-- fields comes from backend  -->
+
+            <!-- {% for fm in forms %}
+                <div class="mb-3">
+                    {{fm.label_tag}}
+                    {{fm}}
+                    <span style="color:red">{{fm.errors}}</span>
+                </div>
+            {% endfor %} -->
+
+
+            <!-- host name -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Hostname</label>
+                {{forms.hostname}}
+            </div>
+
+            <!-- vpn country -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Country</label>
+                <input type="text" list="countrylist" name="countryshorts" placeholder="Search Country ..." class="form-control">
+                <datalist id="countrylist" style="width: 50%;">
+
+                    {% for country in countries %}
+                        <option value="{{country.shortName}}">{{country.fullName}}</option>
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <!-- vpn username -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Username</label>
+                {{forms.username}}
+            </div>
+
+            <!-- vpn password -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Password</label>
+                {{forms.pasword}}
+            </div>
+
+            <!-- vpn config -->
+            <div class="mb-3">
+                <label for="" class="form-label">Enter Vpn Config</label>
+                {{forms.config}}
+            </div>
+
+        
+            <!-- submit div -->
+            <div class="mb-3">
+                <input type="submit" class="btn btn-primary" value="ADD VPN">
+                <a href="{% url 'vpndashboard' %}" class="btn btn-secondary">Cancel</a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+</div>
+
+
+
+
+{% endblock body %}
+
+
+<!-- js block  -->
+{% block js %}
+
+
+{% endblock js %}
