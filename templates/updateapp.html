@@ -67,24 +67,25 @@
 
 
             <!-- vpn server  -->
-            <div class="mb-3">
-                <label for="" class="form-label">Vpn Server </label>
-                <input type="text" name="uvpnserver" id="uvpnserver" value="{{app.vpnserver}}" class="form-control">
-            </div>
+            
 
 
             <!-- app logo  -->
-            <div class="mb-3">
-                <img src="{{app.applogo.url}}" alt="No Logo">
-            </div>
             
-            <div class="mb-3">
-                <label for="" class="form-label">Vpn Server </label>
-                <input type="file" name="uapplogo" id="uapplogo" value="{{app.applogo}}" class="form-control">
+            
+            <div class="mb-4">
+                <div>
+                    <label for="" class="form-label">Change Logo</label>
+                </div>
+
+                <label for="uapplogo" class="shadow" style="border: 1px solid lightgray;padding: 10px; border-radius: 5px;"><img src="{{app.applogo.url}}" alt="No Logo" height="70px" ></label>
+
+                <input type="file" name="uapplogo" id="uapplogo" value="{{app.applogo}}" class="form-control" style="display: none;visibility: hidden;">
             </div>
             
             <!-- submit  -->
             <div class="mb-3">
+
                 <input type="submit" value="Update App" class="btn btn-success">
                 <a href="{% url 'appdashboard' %}" class="btn btn-secondary">Back</a>
             </div>

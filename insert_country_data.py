@@ -248,6 +248,8 @@ def insert_value():
     for short , full in data:
         
         mydb = db.connect(host = 'localhost' , user = 'root' , passwd = 'ide@c0d3r' , database = 'idevpnpanel')
+        # mydb = db.connect(host = 'localhost' , user = 'root' , passwd = 'root' , database = 'idevpnpanel')
+
 
         cur = mydb.cursor()
 

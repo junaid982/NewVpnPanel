@@ -2,6 +2,7 @@
 {% load static %}
 
 
+
 <!-- title block -->
 {% block title %}
 <title>Application Dashboard</title>
@@ -84,19 +85,19 @@
                             <div class="dropdown">
                                 <button class="btn btn-light dropdown-toggle border w-100" type="button"
                                     id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Dropdown button
+                                    Select Server
                                 </button>
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
-                                    
+
                                     {% for vpn in allvpn %}
 
-                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn.countryshorts}}"><span class="ps-2">{{vpn.countryshorts}}</span></li>
+                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn.countryshorts}}" ><span class="ps-2">{{vpn.countryshorts}}</span></li>
                                     {% endfor %}
 
                                     <input type="text" name="vpnserver" id="vpnserver" hidden>
                                 </ul>
                             </div>
-                            
+
 
 
                         </td>
@@ -118,19 +119,40 @@
                 <!-- show all apps from here  -->
                 {% for app in allapps %}
 
-                <tr id="{{app.id}}">
+                <tr id="">
+                    <!-- show applogo  -->
                     <td>
                         <img src="{{app.applogo.url}}" alt="No Logo" class="" height="50px">
                     </td>
 
+                    <!-- show appname  -->
                     <td>{{app.appname}}</td>
+
+                    <!-- show packagename  -->
                     <td>{{app.packagename}}</td>
-                    <td><input type="text" value="{{app.vpnserver}}" class="form-control" readonly></td>
 
+                    <!-- show vpn server  -->
                     <td>
-                        <a href="{% url 'UpdateApp' app.id %}"><img src="{% static 'Logo/update.png' %}" alt="No dlt Icon"></a>
+                        
+                        <div class="dropdown">
+                            <input type="text" value="Select Vpn Region" class="form-control dropdown-toggle"
+                                id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" readonly
+                                onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}')">
 
-                        <form action="{% url 'DeleteApp' app.id %}" onsubmit="return deleteBtn()" style="display: inline-block;">
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}">
+                                
+                            </ul>
+                        </div>
+                        
+                    </td>
+
+                    <!-- show action button -->
+                    <td>
+                        <a href="{% url 'UpdateApp' app.id %}"><img src="{% static 'Logo/update.png' %}"
+                                alt="No dlt Icon"></a>
+
+                        <form action="{% url 'DeleteApp' app.id %}" onsubmit="return deleteBtn()"
+                            style="display: inline-block;">
                             <!-- <a href=""><img src="{% static 'Logo/delete.png' %}" alt="No dlt Icon"></a> -->
 
                             <button style="border: none;" type="submit"><img src="{% static 'Logo/delete.png' %}"
@@ -178,16 +200,16 @@
 {% block js %}
 
 <script>
-  function deleteBtn(){
-    var x = confirm('Are You Sure You Want To Delete This App ?');
+    function deleteBtn() {
+        var x = confirm('Are You Sure You Want To Delete This App ?');
 
-    if (x == true){
-      return true;
+        if (x == true) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-    else{
-      return false;
-    }
-  }
 
 
 </script>
@@ -205,22 +227,46 @@
 
     // select checkbox values 
     var val = [];
-    $(function(){
-      $('#addappsBtn').click(function(){
-        $(':checkbox:checked').each(function(i){
-          val[i] = $(this).val();
-        });
-        
-        console.log(val)
+    $(function () {
+        $('#addappsBtn').click(function () {
+            $(':checkbox:checked').each(function (i) {
+                val[i] = $(this).val();
+            });
 
-        var vpnserver = document.getElementById('vpnserver');
-        vpnserver.value = val;
-      });
+            console.log(val)
+
+            var vpnserver = document.getElementById('vpnserver');
+            vpnserver.value = val;
+        });
     });
 
 
-    
- 
+
+
+    // Drpdown 
+    function showDrops(dropdata , id) {
+        // console.log(dropdata , id)
+        // console.log(typeof(id))
+
+        var droparray =  dropdata.split(",");
+        var ul = document.getElementById(id);
+        var li = '';
+        // console.log(droparray)
+
+        for (var i=0 ; i< droparray.length;i++){
+            li += `
+            <li class="px-3"><input type="checkbox" class="chkvalue" value="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
+            `
+        }
+        ul.innerHTML = li
+
+        // ul.style.color = 'red'
+
+
+        
+    }
+
+
 
 </script>
 

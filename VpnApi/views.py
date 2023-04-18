@@ -8,7 +8,11 @@ from .forms import LoginForm , VpnForm , AddAppForm
 from .models import VpnModel ,CountryModel , ApplicationModel
 from rest_framework.response import Response
 
-from .serializers import AppSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
+from rest_framework.decorators import api_view
+
+from .serializers import AppSerializer , VpnSerializer
 
 
 
@@ -28,7 +32,71 @@ def getapp_api(request):
         return JsonResponse(serializer.data , content_type = 'application/json' ,safe=False)
         # return Response(serializer.data)
     
-    
+
+# return all data enable or diable both 
+@permission_classes((IsAuthenticated, ))
+@api_view(['POST'])
+def allvpn_api(request):
+    if request.method =='POST':
+        try:
+            #get package name from request
+            packagename = request.data['packagename']
+
+            # check application exist or not from our side 
+            allapp = ApplicationModel.objects.get(packagename = packagename)
+
+            vpnserver = allapp.vpnserver.split(',')
+            
+            allvpn = VpnModel.objects.filter(countryshorts__in = vpnserver , is_enable = True)
+            # allvpn = allvpn.filter()
+            
+            serializer = VpnSerializer(allvpn , many=True)
+
+            return JsonResponse(serializer.data , safe=False )
+
+        except:
+            print('Except')
+            return JsonResponse({'status':'Package Not Found'} , safe=False )
+
+
+
+@permission_classes((IsAuthenticated, ))
+@api_view(['GET'])       
+def allvpns_api(request):
+    if request.method == "GET":
+
+        allvpn = VpnModel.objects.all()
+        active = request.GET.get('active')
+        # print(active ,type(active))
+        if active == 'true':
+            activevpn = allvpn.filter(is_enable = True)
+            serializer = VpnSerializer(activevpn , many=True)
+            return JsonResponse(serializer.data , safe=False )
+
+        deactive = request.GET.get('deactive')
+        # print(active ,type(active))
+        if active == 'false ':
+            deactivevpn = allvpn.filter(is_enable = False)
+            serializer = VpnSerializer(deactivevpn , many=True)
+            return JsonResponse(serializer.data , safe=False )
+
+        
+
+
+        serializer = VpnSerializer(allvpn , many=True)
+
+        return JsonResponse(serializer.data , safe=False )
+
+
+
+
+# all activ vpn 
+# @permission_classes((IsAuthenticated, ))
+# @api_view(['GET'])
+# def activevpn_api()
+
+
+
 # Create your views here.
 
 
@@ -216,7 +284,7 @@ def appdashboard_view(request ):
     allvpn = VpnModel.objects.filter(is_enable = True)
     allapps = ApplicationModel.objects.all()
     forms = AddAppForm()
-
+    
     if request.method == 'POST':
         applogo = request.FILES.get('applogo')
         appname = request.POST.get('appname')
@@ -228,11 +296,12 @@ def appdashboard_view(request ):
         # print(vpnserver , type(vpnserver))
 
         if vpnserver == "":
-            ls = []
+            vpnls = []
             for i in allvpn:
                 print(i.countryshorts)
-                ls.append(i.countryshorts)
-            vpnserver = ','.join(ls)
+                vpnls.append(i.countryshorts)
+            
+            vpnserver = ','.join(vpnls)
         
         apps = ApplicationModel()
         apps.applogo = applogo
@@ -241,10 +310,9 @@ def appdashboard_view(request ):
         apps.vpnserver = vpnserver
         apps.save()
         return redirect('appdashboard')
-        
-     
 
-    context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms}
+
+    context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms  }
     return render(request , 'appdashboard.html' , context)
 
 
