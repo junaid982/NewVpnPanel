@@ -45,13 +45,15 @@ def allvpn_api(request):
             # check application exist or not from our side 
             allapp = ApplicationModel.objects.get(packagename = packagename)
 
-            vpnserver = allapp.vpnserver.split(',')
+            vpnserver = set(allapp.vpnserver.split(','))
+            print(vpnserver)
             
             allvpn = VpnModel.objects.filter(countryshorts__in = vpnserver , is_enable = True)
             # allvpn = allvpn.filter()
             
             serializer = VpnSerializer(allvpn , many=True)
 
+            print("Response All Enable Vpn ")
             return JsonResponse(serializer.data , safe=False )
 
         except:
@@ -71,6 +73,8 @@ def allvpns_api(request):
         if active == 'true':
             activevpn = allvpn.filter(is_enable = True)
             serializer = VpnSerializer(activevpn , many=True)
+            print("Response All Enable Vpn ")
+
             return JsonResponse(serializer.data , safe=False )
 
         deactive = request.GET.get('deactive')
@@ -78,13 +82,15 @@ def allvpns_api(request):
         if active == 'false ':
             deactivevpn = allvpn.filter(is_enable = False)
             serializer = VpnSerializer(deactivevpn , many=True)
+            
+            print("Response All Disable Vpn ")
             return JsonResponse(serializer.data , safe=False )
 
         
 
 
         serializer = VpnSerializer(allvpn , many=True)
-
+        print("Response All Vpn ")
         return JsonResponse(serializer.data , safe=False )
 
 
