@@ -331,15 +331,25 @@ def UpdateApp_view(request , id):
     app = ApplicationModel.objects.get(id = id)
 
     if request.method == 'POST':
-        applogo = request.POST.get('uapplogo')
         appname = request.POST.get('uappname')
         packagename = request.POST.get('upackagename')
-        vpnserver = request.POST.get('uvpnserver')
+        applogo = request.FILES.get('uapplogo')
+
+        
+        
 
         print(applogo)
         print(appname)
         print(packagename)
-        print(vpnserver)
+        # print(vpnserver)
+
+        app.appname = appname
+        app.packagename = packagename
+
+        if applogo:
+            app.applogo = applogo
+
+        app.save()
 
         return redirect('appdashboard')
 
