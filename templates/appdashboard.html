@@ -253,9 +253,11 @@
 
     // app dashboard search vpn Drpdown 
     function showDrops(dropdata , id , allvpn) {
-        
+        // window.location = '/appdashboard/'
         var droparray =  dropdata.split(",");
         var ul = document.getElementById(id);
+        var div = document.getElementById('div'+id);
+        
         var li = '';
         // console.log(droparray)
 
@@ -278,7 +280,29 @@
             `
         }
         ul.innerHTML = li
+
+        // display save button 
+        div.innerHTML = `<a href="/appdashboard/" class="btn btn-success px-4" onclick="GetSearchBoxData('${id}')">Save</a>`
     }
+
+
+    // get all search box checked data 
+    // get all the selected value from search check box 
+    var searchval = []
+    function GetSearchBoxData(id){
+        console.log(id)
+        console.log(`#vpn+${id}:checked`)
+        try{
+            var checkedsearchValue = document.querySelector(`#vpn${id}:checked`).value;
+            // val += checkedValue
+            val.push(checkedsearchValue)
+        }
+        catch{
+            console.log('unchecked')
+        }
+        console.log(checkedsearchValue)
+    }
+
 
     
 
