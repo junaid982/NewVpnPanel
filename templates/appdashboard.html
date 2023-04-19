@@ -139,7 +139,7 @@
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" readonly
                                 onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}' , {{allvpnregion}})">
 
-                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}">
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}" >
                                 
                             </ul>
                         </div>
@@ -147,7 +147,7 @@
                     </td>
 
                     <!-- show action button -->
-                    <td>
+                    <td id="div{{app.id}}">
                         <a href="{% url 'UpdateApp' app.id %}"><img src="{% static 'Logo/update.png' %}"
                                 alt="No dlt Icon"></a>
 
@@ -238,7 +238,7 @@
         catch{
             console.log('unchecked')
         }
-        console.log(val)
+        // console.log(val)
     }
 
     // this function is used to add vpn server checked  data 
@@ -253,27 +253,34 @@
 
     // app dashboard search vpn Drpdown 
     function showDrops(dropdata , id , allvpn) {
-        // console.log(dropdata , id)
-        // console.log(typeof(id))
-        // console.log(allvpn)
-
+        
         var droparray =  dropdata.split(",");
         var ul = document.getElementById(id);
         var li = '';
         // console.log(droparray)
 
+        // get the unchecked array 
+        let difference = allvpn.filter(x => !droparray.includes(x));
+        console.log(difference)
+
+        // display all the selected data 
         for (var i=0 ; i< droparray.length;i++){
             li += `
-            <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
+            <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${droparray[i]}" id="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
+            `
+        }
+
+        // display all the unselected data 
+
+        for (var i=0 ; i< difference.length;i++){
+            li += `
+            <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${difference[i]}" id="${difference[i]}" ><span class="ps-2">${difference[i]}</span></li>
             `
         }
         ul.innerHTML = li
-
-        // ul.style.color = 'red'
-
-
-        
     }
+
+    
 
 
 
