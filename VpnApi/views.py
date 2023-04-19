@@ -290,26 +290,31 @@ def appdashboard_view(request ):
         if vpn.countryshorts not in allvpnregion:
             allvpnregion.append(vpn.countryshorts)
 
-    
+    # print("All vpn regions :",allvpnregion , '\n')
     # add apps 
     if request.method == 'POST':
         applogo = request.FILES.get('applogo')
         appname = request.POST.get('appname')
         packagename = request.POST.get('packagename')
         vpnserver = request.POST.get('vpnserver')
+
+        print('Vpn Server ',vpnserver , '\n')
+        print('len of vpn ',len(vpnserver) , '\n')
         # print(applogo , type(applogo))
         # print(appname)
         # print(packagename)
         # print(vpnserver , type(vpnserver))
 
-        if vpnserver == "":
+        if vpnserver == "" or vpnserver == " ":
             
             vpnserver = ','.join(allvpnregion)
-        
+            # print('selected Vpn regions ', vpnserver, '\n')
+
         apps = ApplicationModel()
         apps.applogo = applogo
         apps.appname = appname
         apps.packagename = packagename
+        print('Befor insert VPN ',vpnserver, '\n')
         apps.vpnserver = vpnserver
         apps.save()
         return redirect('appdashboard')

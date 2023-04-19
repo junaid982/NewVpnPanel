@@ -84,14 +84,14 @@
 
                             <div class="dropdown">
                                 <button class="btn btn-light dropdown-toggle border w-100" type="button"
-                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                    id="dropdownMenuButton1"  data-bs-toggle="dropdown" aria-expanded="false">
                                     Select Server
                                 </button>
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
 
                                     {% for vpn in allvpnregion %}
-                                    {{allvpnregion}}
-                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn }}" ><span class="ps-2">{{vpn}}</span></li>
+                                    
+                                    <li class="px-3"><input type="checkbox" onclick="CheckAppBtn('{{vpn}}')" class="chkvalue" value="{{vpn}}" id="{{vpn}}" ><span class="ps-2">{{vpn}}</span></li>
                                     {% endfor %}
 
                                     <input type="text" name="vpnserver" id="vpnserver" hidden>
@@ -106,7 +106,7 @@
 
                         <!-- Add App Btn   -->
                         <td>
-                            <input type="submit" id="addappsBtn" value="ADD APP " class="btn btn-success">
+                            <input type="submit" value="ADD APP " class="btn btn-success" onclick="addappsBtn()">
                             <a href="{% url 'appdashboard' %}" class="btn btn-secondary">Cancel</a>
                         </td>
 
@@ -225,29 +225,37 @@
     })
 
 
-    // select checkbox values 
-    var val = [];
-    $(function () {
-        $('#addappsBtn').click(function () {
-            $(':checkbox:checked').each(function (i) {
-                val[i] = $(this).val();
-            });
+    
+    // add app section 
+    // first function is used to get the checked boc values the second function is used to post the data 
+    var val = []
+    function CheckAppBtn(vpn){
+        try{
+            var checkedValue = document.querySelector(`#${vpn}:checked`).value;
+            // val += checkedValue
+            val.push(checkedValue)
+        }
+        catch{
+            console.log('unchecked')
+        }
+        console.log(val)
+    }
 
-            console.log(val)
+    // this function is used to add vpn server checked  data 
+    var vpnserver = document.getElementById('vpnserver');
+    function addappsBtn(){
+        // vpnserver.value = '';
+        vpnserver.value = val;
+        val = []
 
-            var vpnserver = document.getElementById('vpnserver');
-            vpnserver.value = val;
-        });
-    });
+    }
 
 
-
-
-    // Drpdown 
+    // app dashboard search vpn Drpdown 
     function showDrops(dropdata , id , allvpn) {
         // console.log(dropdata , id)
         // console.log(typeof(id))
-        console.log(allvpn)
+        // console.log(allvpn)
 
         var droparray =  dropdata.split(",");
         var ul = document.getElementById(id);
