@@ -46,18 +46,15 @@ def allvpn_api(request):
             allapp = ApplicationModel.objects.get(packagename = packagename)
 
             vpnserver = set(allapp.vpnserver.split(','))
-            print(vpnserver)
             
             allvpn = VpnModel.objects.filter(countryshorts__in = vpnserver , is_enable = True)
             # allvpn = allvpn.filter()
             
             serializer = VpnSerializer(allvpn , many=True)
 
-            print("Response All Enable Vpn ")
             return JsonResponse(serializer.data , safe=False )
 
         except:
-            print('Except')
             return JsonResponse({'status':'Package Not Found'} , safe=False )
 
 
@@ -77,7 +74,6 @@ def allvpns_api(request):
 
             return JsonResponse(serializer.data , safe=False )
 
-        deactive = request.GET.get('deactive')
         # print(active ,type(active))
         if active == 'false ':
             deactivevpn = allvpn.filter(is_enable = False)
@@ -85,9 +81,6 @@ def allvpns_api(request):
             
             print("Response All Disable Vpn ")
             return JsonResponse(serializer.data , safe=False )
-
-        
-
 
         serializer = VpnSerializer(allvpn , many=True)
         print("Response All Vpn ")
@@ -281,6 +274,7 @@ def updatevpn_view(request , id):
 
 #     context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms}
 #     return render(request , 'appdashboard.html' , context)
+
 
 
 

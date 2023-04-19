@@ -90,7 +90,7 @@
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
 
                                     {% for vpn in allvpnregion %}
-
+                                    {{allvpnregion}}
                                     <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn }}" ><span class="ps-2">{{vpn}}</span></li>
                                     {% endfor %}
 
@@ -99,7 +99,7 @@
                             </div>
 
 
-
+                            
                         </td>
 
 
@@ -137,7 +137,7 @@
                         <div class="dropdown">
                             <input type="text" value="Select Vpn Region" class="form-control dropdown-toggle"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" readonly
-                                onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}')">
+                                onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}' , {{allvpnregion}})">
 
                             <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}">
                                 
@@ -244,9 +244,10 @@
 
 
     // Drpdown 
-    function showDrops(dropdata , id) {
+    function showDrops(dropdata , id , allvpn) {
         // console.log(dropdata , id)
         // console.log(typeof(id))
+        console.log(allvpn)
 
         var droparray =  dropdata.split(",");
         var ul = document.getElementById(id);
