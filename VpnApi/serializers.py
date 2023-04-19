@@ -11,7 +11,7 @@ class AppSerializer(serializers.ModelSerializer):
 class VpnSerializer(serializers.ModelSerializer):
     class Meta:
         model = VpnModel
-        fields = ['id' ,'hostname', 'countryshorts' , 'username' , 'pasword' , 'config' , 'config']
+        fields = ['id' ,'hostname', 'countryshorts' , 'username' , 'pasword' , 'config' , 'is_enable']
 
 
 

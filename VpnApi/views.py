@@ -214,7 +214,7 @@ def deletevpn_view(request , id):
 
 # update Vpn 
 
-
+@login_required(login_url='signin')
 def updatevpn_view(request , id):
 
     countries = CountryModel.objects.all()
@@ -284,13 +284,20 @@ def updatevpn_view(request , id):
 
 
 
-
+@login_required(login_url='signin')
 def appdashboard_view(request ):
 
     allvpn = VpnModel.objects.filter(is_enable = True)
     allapps = ApplicationModel.objects.all()
     forms = AddAppForm()
+    # get all vpn region added into vpn panel
+    allvpnregion = []
+    for vpn in allvpn:
+        if vpn.countryshorts not in allvpnregion:
+            allvpnregion.append(vpn.countryshorts)
+
     
+    # add apps 
     if request.method == 'POST':
         applogo = request.FILES.get('applogo')
         appname = request.POST.get('appname')
@@ -302,12 +309,8 @@ def appdashboard_view(request ):
         # print(vpnserver , type(vpnserver))
 
         if vpnserver == "":
-            vpnls = []
-            for i in allvpn:
-                print(i.countryshorts)
-                vpnls.append(i.countryshorts)
             
-            vpnserver = ','.join(vpnls)
+            vpnserver = ','.join(allvpnregion)
         
         apps = ApplicationModel()
         apps.applogo = applogo
@@ -317,14 +320,14 @@ def appdashboard_view(request ):
         apps.save()
         return redirect('appdashboard')
 
-
-    context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms  }
+    
+    context = {'allvpn' : allvpn , 'allapps' : allapps , 'forms':forms ,'allvpnregion':allvpnregion }
     return render(request , 'appdashboard.html' , context)
 
 
 
 # delete app 
-
+@login_required(login_url='signin')
 def DeleteApp_view(request , id):
 
     apps = ApplicationModel.objects.get(id = id).delete()
@@ -332,7 +335,7 @@ def DeleteApp_view(request , id):
     return redirect('appdashboard')
 
 
-
+@login_required(login_url='signin')
 def UpdateApp_view(request , id):
     app = ApplicationModel.objects.get(id = id)
 

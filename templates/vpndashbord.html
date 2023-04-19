@@ -62,7 +62,7 @@
           <td>{{vpn.updated_at}}</td>
           
           
-          <td>{% if vpn.is_enable %} Enable {% else %} Disable {% endif %} </td>
+          <td>{% if vpn.is_enable %} <span><i class="bi bi-check-circle-fill text-success"></i></span> {% else %}  <span><i class="bi bi-x-circle-fill text-danger"></i></span>{% endif %} </td>
 
 
           <td>

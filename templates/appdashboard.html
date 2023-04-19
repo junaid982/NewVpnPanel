@@ -89,9 +89,9 @@
                                 </button>
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
 
-                                    {% for vpn in allvpn %}
+                                    {% for vpn in allvpnregion %}
 
-                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn.countryshorts}}" ><span class="ps-2">{{vpn.countryshorts}}</span></li>
+                                    <li class="px-3"><input type="checkbox" class="chkvalue" value="{{vpn }}" ><span class="ps-2">{{vpn}}</span></li>
                                     {% endfor %}
 
                                     <input type="text" name="vpnserver" id="vpnserver" hidden>
@@ -255,7 +255,7 @@
 
         for (var i=0 ; i< droparray.length;i++){
             li += `
-            <li class="px-3"><input type="checkbox" class="chkvalue" value="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
+            <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
             `
         }
         ul.innerHTML = li
