@@ -84,14 +84,16 @@
 
                             <div class="dropdown">
                                 <button class="btn btn-light dropdown-toggle border w-100" type="button"
-                                    id="dropdownMenuButton1"  data-bs-toggle="dropdown" aria-expanded="false">
+                                    id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     Select Server
                                 </button>
                                 <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1">
 
                                     {% for vpn in allvpnregion %}
-                                    
-                                    <li class="px-3"><input type="checkbox" onclick="CheckAppBtn('{{vpn}}')" class="chkvalue" value="{{vpn}}" id="{{vpn}}" ><span class="ps-2">{{vpn}}</span></li>
+
+                                    <li class="px-3"><input type="checkbox" onclick="CheckAppBtn('{{vpn}}')"
+                                            class="chkvalue" value="{{vpn}}" id="{{vpn}}"><span
+                                            class="ps-2">{{vpn}}</span></li>
                                     {% endfor %}
 
                                     <input type="text" name="vpnserver" id="vpnserver" hidden>
@@ -99,7 +101,7 @@
                             </div>
 
 
-                            
+
                         </td>
 
 
@@ -133,18 +135,20 @@
 
                     <!-- show vpn server  -->
                     <td>
-                        
+
                         <div class="dropdown">
                             <input type="text" value="Select Vpn Region" class="form-control dropdown-toggle"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" readonly
                                 onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}' , {{allvpnregion}})">
 
-                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}" >
-                                
+                            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton1" id="{{app.id}}">
+
                             </ul>
                         </div>
-                        
+
                     </td>
+
+
 
                     <!-- show action button -->
                     <td id="div{{app.id}}">
@@ -225,17 +229,17 @@
     })
 
 
-    
+
     // add app section 
     // first function is used to get the checked boc values the second function is used to post the data 
     var val = []
-    function CheckAppBtn(vpn){
-        try{
+    function CheckAppBtn(vpn) {
+        try {
             var checkedValue = document.querySelector(`#${vpn}:checked`).value;
             // val += checkedValue
             val.push(checkedValue)
         }
-        catch{
+        catch {
             console.log('unchecked')
         }
         // console.log(val)
@@ -243,7 +247,7 @@
 
     // this function is used to add vpn server checked  data 
     var vpnserver = document.getElementById('vpnserver');
-    function addappsBtn(){
+    function addappsBtn() {
         // vpnserver.value = '';
         vpnserver.value = val;
         val = []
@@ -252,59 +256,105 @@
 
 
     // app dashboard search vpn Drpdown 
-    function showDrops(dropdata , id , allvpn) {
+    function showDrops(dropdata, id, allvpn) {
         // window.location = '/appdashboard/'
-        var droparray =  dropdata.split(",");
+        var droparray = dropdata.split(",");
         var ul = document.getElementById(id);
-        var div = document.getElementById('div'+id);
-        
+        var div = document.getElementById('div' + id);
+
         var li = '';
         // console.log(droparray)
 
         // get the unchecked array 
         let difference = allvpn.filter(x => !droparray.includes(x));
-        console.log(difference)
+        console.log(' unchecked vpns :', difference)
 
-        // display all the selected data 
-        for (var i=0 ; i< droparray.length;i++){
+        // display all the checked vpn 
+        for (var i = 0; i < droparray.length; i++) {
             li += `
             <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${droparray[i]}" id="${droparray[i]}" checked><span class="ps-2">${droparray[i]}</span></li>
             `
         }
 
-        // display all the unselected data 
-
-        for (var i=0 ; i< difference.length;i++){
+        // display all the unchecked vpn 
+        for (var i = 0; i < difference.length; i++) {
             li += `
             <li class="px-3"><input type="checkbox" class="searchchkvalue" value="${difference[i]}" id="${difference[i]}" ><span class="ps-2">${difference[i]}</span></li>
             `
         }
+
         ul.innerHTML = li
 
         // display save button 
-        div.innerHTML = `<a href="/appdashboard/" class="btn btn-success px-4" onclick="GetSearchBoxData('${id}')">Save</a>`
+        div.innerHTML = `<a href="/appdashboard/" class="btn btn-success px-4" onclick="GetSearchBoxData('${id}' , '${allvpn}')">Save</a>`
     }
 
 
     // get all search box checked data 
     // get all the selected value from search check box 
-    var searchval = []
-    function GetSearchBoxData(id){
-        console.log(id)
-        console.log(`#vpn+${id}:checked`)
-        try{
-            var checkedsearchValue = document.querySelector(`#vpn${id}:checked`).value;
-            // val += checkedValue
-            val.push(checkedsearchValue)
+    function GetSearchBoxData(id, allvpn) {
+        var checkdValue = []
+
+        // convert string data into array 
+        var allvpnarray = allvpn.split(",");
+        console.log('application Id', id)
+        // console.log('allvpn ',allvpnarray , typeof(allvpnarray))
+        // console.log(`#vpn${id}:checked`)
+
+        for (var i = 0; i < allvpnarray.length; i++) {
+            // console.log(allvpnarray[i])
+            try {
+                var checkedsearchValue = document.querySelector(`#${allvpnarray[i]}:checked`).value;
+                checkdValue.push(checkedsearchValue)
+            }
+            catch {
+                console.log('unchecked')
+            }
         }
-        catch{
-            console.log('unchecked')
+        // alert(checkdValue)
+
+        // call api to update dropdown options 
+
+        // axios.put(`http://192.168.0.181:8000/api/update-vpn-server/${id}/`,
+        //     {
+        //         headers: {
+        //             'Authorization': '574716c50ebc853957ccef06a932510907adcd4c' //the token is a variable which holds the token
+        //         }
+
+        //     }).then((resp) => {
+        //         alert(resp.data)
+        //     })
+        //     .catch((err) => {
+        //         alert(err)
+        //     })
+        // var fd = new FormData();
+        // fd.append('vpnserver' ,checkdValue );
+        // fd.append('csrfmiddlewaretoken','{{csrf_token}}');
+
+        let formd  ={
+            'vpnserver':checkdValue.toString(),
+            'csrfmiddlewaretoken':'{{csrf_token}}'
+
         }
-        console.log(checkedsearchValue)
+
+        axios.put(`http://192.168.0.181:8000/api/update-vpn-server/${id}/`, formd , {
+            headers: {
+                'Authorization': 'token 574716c50ebc853957ccef06a932510907adcd4c'
+            }
+        }
+        ).then((resp) => {
+            console.log(resp.data)
+                alert(resp.data['status'] )
+            })
+            .catch((err) => {
+                alert(err)
+            })
+
+
     }
 
 
-    
+
 
 
 

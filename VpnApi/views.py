@@ -17,19 +17,30 @@ from .serializers import AppSerializer , VpnSerializer
 
 
 # api views
+@api_view(['PUT'])
+def UpdateVpnServer_api(request , id):
 
-def getapp_api(request):
+    if request.method == 'PUT':
+        print(id)
 
-    if request.method == 'GET':
-        all_app = ApplicationModel.objects.all()
+        # fetching old app data as per id 
+        appdata = ApplicationModel.objects.get(id = id)
 
-        a_id = request.GET.get('id')
-        if a_id:
-            all_app = all_app.filter(id = a_id)
+        # accept data from request
+        newdata = request.data
+        print(newdata)
+        print(type(newdata))
 
-        serializer = AppSerializer(all_app , many=True)
 
-        return JsonResponse(serializer.data , content_type = 'application/json' ,safe=False)
+        # call serializer to update 
+        # serializer = StudentSerializer(stu, data=pythondata, partial=True)
+        serializer = AppSerializer(appdata, data=newdata, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({'status':'Server Updated Successfully '} , safe=False)
+
+        return JsonResponse(serializer.errors , safe=False)
+
         # return Response(serializer.data)
     
 
