@@ -38,7 +38,7 @@
     <!-- dashboard container  -->
     <div class="container-xxl my-4 p-3 bg-light rounded-3 shadow">
 
-        <table class="table">
+        <table class="table table-hover">
             <thead>
                 <th style="width: 20%;">Logo</th>
                 <th style="width: 20%;">App Name</th>
@@ -137,7 +137,7 @@
                     <td>
 
                         <div class="dropdown">
-                            <input type="text" value="Select Vpn Region" class="form-control dropdown-toggle"
+                            <input type="text" value="{{app.vpnserver}}" class="form-control dropdown-toggle"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" readonly
                                 onclick="showDrops('{{app.vpnserver}}' , '{{app.id}}' , {{allvpnregion}})">
 

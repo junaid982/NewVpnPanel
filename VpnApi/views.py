@@ -136,16 +136,11 @@ def signin_view(request):
             messages.info(request, 'Login Successfull')
             return redirect('vpndashboard')
 
-            
-
         messages.info(request, 'Something Went Wrong Check Your Username or Password')
 
         
     context = {'forms':forms}
     return render(request , 'signin.html' , context)
-
-
-
 
 
 
@@ -165,10 +160,21 @@ def signout_view(request):
 @login_required(login_url='signin')
 def vpndashboard_view(request):
 
+    countries = CountryModel.objects.all()
     allvpn = VpnModel.objects.all()
-
+    if request.method == 'POST':
+        vpn = request.POST.get('searchvpndashboard')
+        print(vpn)
+        if allvpn:
+            allvpn = VpnModel.objects.filter(countryshorts = vpn)
+            
+        else:
+            allvpn = 'No Vpn Avaibalble'
+            
+    
+   
     user = request.user
-    context = {'user' : user , 'allvpn':allvpn}
+    context = {'user' : user , 'allvpn':allvpn ,'countries':countries}
 
     return render(request , 'vpndashbord.html' , context)
 
