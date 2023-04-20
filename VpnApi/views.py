@@ -17,6 +17,7 @@ from .serializers import AppSerializer , VpnSerializer
 
 
 # api views
+@permission_classes((IsAuthenticated, ))
 @api_view(['PUT'])
 def UpdateVpnServer_api(request , id):
 
@@ -28,8 +29,8 @@ def UpdateVpnServer_api(request , id):
 
         # accept data from request
         newdata = request.data
-        print(newdata)
-        print(type(newdata))
+        # print(newdata)
+        # print(type(newdata))
 
 
         # call serializer to update 
